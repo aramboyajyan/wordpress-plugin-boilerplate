@@ -153,6 +153,19 @@ function boilerplate_cron_schedules() {
 }
 
 /**
+ * Start and/or recreate the session
+ */
+function boilerplate_recreate_session() {
+  if (session_id()) {
+    session_destroy();
+    session_start();
+  }
+  else {
+    session_start();
+  }
+}
+
+/**
  * Actions
  */
 add_action('init', 'boilerplate_init');
@@ -161,6 +174,10 @@ add_action('admin_menu', 'boilerplate_admin_menu');
 add_action('wp_ajax_nopriv_boilerplate_ajax', 'boilerplate_ajax');
 add_action('wp_ajax_boilerplate_ajax', 'boilerplate_ajax');
 add_action('boilerplate_execute_cron', 'boilerplate_cron');
+// Action callbacks for recreating the session
+add_action('init', 'boilerplate_recreate_session');
+add_action('wp_login', 'boilerplate_recreate_session');
+add_action('wp_logout', 'boilerplate_recreate_session');
 
 /**
  * Filters
