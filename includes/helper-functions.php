@@ -1,32 +1,34 @@
 <?php
+
 /**
- * All helper functions used in the plugin
+ * @file
+ * All helper functions used in the plugin.
  *
  * Created by: Topsitemakers
  * http://www.topsitemakers.com/
  */
 
 /**
- * Display fields
- * If $admin_page is enabled, value will be fetched with get_option()
+ * Display fields.
+ * If $admin_page is enabled, value will be fetched with get_option().
  */
 function boilerplate_field($field, $print = true, $admin_page = false) {
-  // Wrap
+  // Wrap.
   $output  = '<div class="form-item '.$field['class'].'">';
-  // Label
+  // Label.
   if ($field['label']) {
     $output .= '<label for="'.$field['id'].'">'.$field['label'].'</label>';
   } else {
     $output .= '<label class="spacer"></label>';
   }
   // Field value - if it's admin field, fetch it with get_option()
-  // "no-save" fields are checkboxes on edit templates page
+  // "no-save" fields are checkboxes on edit templates page.
   if (!$field['no-save']) {
     $field['value'] = ($admin_page && $field['type']!='submit' && !$field['editor']) ? get_option(BOILERPLATE_SHORTNAME.$field['id']) : $field['value'];
   }
-  // Field wrapper
+  // Field wrapper.
   $output .= '<div class="field">';
-  // Field
+  // Field.
   switch ($field['type']) {
     case 'text':
       $output .= '<input type="text" id="'.$field['id'].'" name="'.$field['id'].'" value="'.$field['value'].'" />';
@@ -63,37 +65,37 @@ function boilerplate_field($field, $print = true, $admin_page = false) {
       $output .= '<input class="button" type="submit" id="'.$field['id'].'" value="'.$field['value'].'" />';
       break;
   }
-  // Help
+  // Help.
   if ($field['help']) $output .= '<div class="help">'.$field['help'].'</div>';
-  // Close field wrapper
+  // Close field wrapper.
   $output .= '</div>';
-  // Close wrap
+  // Close wrap.
   $output .= '</div>';
   return $print ? print $output : $output;
 }
 
 /**
- * Closing for custom fields
+ * Closing for custom fields.
  */
 function boilerplate_field_close($print = true) {
   return $print ? print '<div class="form-item-clear"></div>' : '<div class="form-item-clear"></div>';
 }
 
 /**
- * Generate admin page
+ * Generate admin page.
  */
 function boilerplate_generate_admin_page($page) {
-  // Wrap everything for styling
+  // Wrap everything for styling.
   $output  = '<div id="boilerplate-admin-page"><div class="wrap">';
-  // Page title and tabs
+  // Page title and tabs.
   $output .= '<h2>'.$page['title'].'</h2>';
-  // Page description
+  // Page description.
   if ($page['description']) $output .= '<strong>'.$page['description'].'</strong>';
-  // Page help text
+  // Page help text.
   if ($page['content']) $output .= '<p>'.$page['content'].'</p>';
-  // Form
+  // Form.
   if ($page['form']) $output .= '<form action="'.htmlspecialchars($_SERVER['REQUEST_URI']).'" method="post">';
-  // Page fields
+  // Page fields.
   if ($page['fieldset']) {
     foreach ($page['fieldset'] as $fieldset) {
       $output .= '<div class="boilerplate-fieldset-div metabox-holder">';
@@ -115,15 +117,15 @@ function boilerplate_generate_admin_page($page) {
       $output .= '</div>';
     }
   }
-  // Close form
+  // Close form.
   if ($page['form']) $output .= '</form>';
-  // Close wrappers
+  // Close wrappers.
   $output .= '</div></div>';
   print $output;
 }
 
 /**
- * Handle saving of admin settings data - mass
+ * Handle saving of admin settings data - mass.
  */
 function boilerplate_admin_page_save_handle($message = NULL) {
   foreach ($_POST as $id => $value) update_option(BOILERPLATE_SHORTNAME.$id, $value);

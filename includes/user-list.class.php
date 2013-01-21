@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Custom table list class
+ * Custom table list class.
  *
  * Created by: Topsitemakers
  * http://www.topsitemakers.com/
@@ -11,12 +11,12 @@
 // Load base class if it doesn't exist
 if(!class_exists('WP_List_Table')) require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 
-// Plugin class
+// Plugin class.
 class Boilerplate_List_Users extends WP_List_Table {
   
   /**
    * Construct function
-   * Set default settings
+   * Set default settings.
    */
   function __construct() {
     global $status, $page;
@@ -30,7 +30,7 @@ class Boilerplate_List_Users extends WP_List_Table {
   
   
   /**
-   * Define column methods
+   * Define column methods.
    */
   function column_default($item, $column_name) {
     switch ($column_name) {
@@ -42,13 +42,13 @@ class Boilerplate_List_Users extends WP_List_Table {
       case 'action':
         return $item[$column_name];
       default:
-        // Debug
+        // Debug.
         // return print_r($item, TRUE);
     }
   }
 
   /**
-   * Define columns
+   * Define columns.
    */
   function get_columns() {
     return array(
@@ -61,64 +61,65 @@ class Boilerplate_List_Users extends WP_List_Table {
   }
   
   /**
-   * Sortable settings
+   * Sortable settings.
    */
   function get_sortable_columns() {
     return array(
-      'name' => array('name',TRUE),     //TRUE means its already sorted
-      'username' => array('username',FALSE),
-      'email' => array('email',FALSE),
+      // Name is sorted by default (second parameter).
+      'name' => array('name', TRUE),
+      'username' => array('username', FALSE),
+      'email' => array('email', FALSE),
     );
   }
   
   
   /**
-   * Prepare the data
+   * Prepare the data.
    */
   function prepare_items() {
     
     $per_page = 25;
     
-    // Column headers
+    // Column headers.
     $columns = $this->get_columns();
     $hidden = array();
     $sortable = $this->get_sortable_columns();
     $this->_column_headers = array($columns, $hidden, $sortable);
     
     /**
-     * Prepare the data
+     * Prepare the data.
      */
     global $wpdb;
 
     /**
-     * Sorting
+     * Sorting.
      */
     function usort_reorder($a,$b) {
       $orderby = (!empty($_REQUEST['orderby'])) ? $_REQUEST['orderby'] : 'name';
       $order = (!empty($_REQUEST['order'])) ? $_REQUEST['order'] : 'asc';
       $result = strcmp($a[$orderby], $b[$orderby]);
-      return ($order==='asc') ? $result : -$result;
+      return ($order === 'asc') ? $result : -$result;
     }
     usort($data, 'usort_reorder');
     
     
-    // Pagination
+    // Pagination.
     $current_page = $this->get_pagenum();
     
-    // Total number of items, necessary for pagination
+    // Total number of items, necessary for pagination.
     $total_items = count($data);
     
-    // Get only items for current page
-    $data = array_slice($data,(($current_page-1)*$per_page),$per_page);
+    // Get only items for current page.
+    $data = array_slice($data,(($current_page - 1) * $per_page),$per_page);
     
-    // Done - add it to items
+    // Done - add it to items.
     $this->items = $data;
     
-    // Register pagination options
+    // Register pagination options.
     $this->set_pagination_args(array(
       'total_items' => $total_items,
       'per_page' => $per_page,
-      'total_pages' => ceil($total_items/$per_page),
+      'total_pages' => ceil($total_items / $per_page),
     ));
   }
   
