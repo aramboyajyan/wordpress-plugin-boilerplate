@@ -59,6 +59,11 @@ function boilerplate_install() {
  */
 function boilerplate_init() {
   
+  // Start the session if it hasn't been started yet
+  if (!session_id()) {
+    session_start();
+  }
+
   // Add necessary scripts
   wp_enqueue_script('boilerplate-ajax-request', WP_PLUGIN_URL . '/boilerplate/assets/boilerplate.js', array('jquery'));
   wp_localize_script('boilerplate-ajax-request', 'Boilerplate', array(
