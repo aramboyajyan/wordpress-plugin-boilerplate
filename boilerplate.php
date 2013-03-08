@@ -148,13 +148,13 @@ function boilerplate_ajax() {
 /**
  * Custom cron schedule periods.
  */
-function boilerplate_cron_schedules() {
-  return array(
-    'every_minute' => array(
-      'interval' => 60,
-      'display' => 'Every minute',
-    ),
+function boilerplate_cron_schedules($schedules) {
+  $schedules['every_minute'] = array(
+    'interval' => 60,
+    'display'  => __('Every minute'),
   );
+
+  return $schedules;
 }
 
 /**
